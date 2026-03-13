@@ -27,11 +27,23 @@ async function register(req, res) {
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
+    const requestedRole = (role || "buyer").toLowerCase();
+
+    if (requestedRole === "admin") {
+      return res.status(403).json({
+        message: "Admin account cannot be created via public registration",
+      });
+    }
+
+    if (!["buyer", "seller"].includes(requestedRole)) {
+      return res.status(400).json({ message: "role must be buyer or seller" });
+    }
+
     const user = await createUser({
       name,
       email,
       passwordHash,
-      role: role || "buyer",
+      role: requestedRole,
     });
 
     const token = buildToken(user);
