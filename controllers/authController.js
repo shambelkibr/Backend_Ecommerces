@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+
 const { createUser, findByEmail, findById } = require("../models/userModel");
 
 function buildToken(user) {
