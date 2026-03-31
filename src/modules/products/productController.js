@@ -5,27 +5,27 @@ const {
   updateProduct,
   deleteProduct,
 } = require("./productModel");
-const { getLatestSellerLicense } = require("../shops/licenseModel");
+const { getShopBySellerId } = require("../shops/shopModel");
 
 async function createProductHandler(req, res) {
   try {
     const { categoryId, name, description, price, quantity } = req.body;
 
-    if (!name || !price || quantity === undefined) {
+    if (!name || !price) {
       return res
         .status(400)
-        .json({ message: "name, price and quantity are required" });
+        .json({ message: "name and price are required" });
     }
 
-    const license = await getLatestSellerLicense(req.user.id);
-    if (!license || license.status !== "approved") {
+    const shop = await getShopBySellerId(req.user.id);
+    if (!shop || shop.status !== "approved") {
       return res
         .status(403)
-        .json({ message: "Seller license is not approved" });
+        .json({ message: "Your shop is not approved to sell products yet." });
     }
 
     const product = await createProduct({
-      sellerId: req.user.id,
+      shopId: shop.id,
       categoryId,
       name,
       description,
@@ -65,14 +65,19 @@ async function getProductHandler(req, res) {
 
 async function updateProductHandler(req, res) {
   try {
-    const { categoryId, name, description, price, quantity } = req.body;
+    const { categoryId, name, description, price, status } = req.body;
 
-    const updated = await updateProduct(req.params.id, req.user.id, {
+    const shop = await getShopBySellerId(req.user.id);
+    if (!shop) {
+       return res.status(403).json({ message: "Shop not found" });
+    }
+
+    const updated = await updateProduct(req.params.id, shop.id, {
       categoryId,
       name,
       description,
       price,
-      quantity,
+      status,
       imagePath: req.file ? `/uploads/products/${req.file.filename}` : null,
     });
 
@@ -88,7 +93,12 @@ async function updateProductHandler(req, res) {
 
 async function deleteProductHandler(req, res) {
   try {
-    const success = await deleteProduct(req.params.id, req.user.id);
+    const shop = await getShopBySellerId(req.user.id);
+    if (!shop) {
+       return res.status(403).json({ message: "Shop not found" });
+    }
+
+    const success = await deleteProduct(req.params.id, shop.id);
 
     if (!success) {
       return res.status(404).json({ message: "Product not found" });

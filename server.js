@@ -10,6 +10,7 @@ const authRoutes = require("./src/modules/auth/authRoutes");
 const productRoutes = require("./src/modules/products/productRoutes");
 const sellerRoutes = require("./src/modules/shops/sellerRoutes");
 const orderRoutes = require("./src/modules/orders/orderRoutes");
+const userRoutes = require("./src/modules/users/userRoutes");
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/sellers", sellerRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/users", userRoutes);
 
 app.get("/", (req, res) => {
   res.send("Debre Birhan Local Clothes Ecommerce API Running");

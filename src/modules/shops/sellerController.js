@@ -1,20 +1,28 @@
 const {
-  createLicense,
-  getLatestSellerLicense,
-  listPendingLicenses,
-  reviewLicense,
-  getLicenseById,
-} = require("./licenseModel");
+  createShop,
+  getShopBySellerId,
+  listPendingShops,
+  reviewShop,
+  getShopById,
+} = require("./shopModel");
 
-async function uploadLicense(req, res) {
+async function registerShop(req, res) {
   try {
-    if (!req.file) {
-      return res.status(400).json({ message: "license file is required" });
+    const { name, description, address } = req.body;
+    if (!name || !address) {
+      return res.status(400).json({ message: "Name and address are required to open a shop." });
     }
 
-    const saved = await createLicense({
+    const existing = await getShopBySellerId(req.user.id);
+    if (existing) {
+       return res.status(400).json({ message: "You already have a shop registered." });
+    }
+
+    const saved = await createShop({
       sellerId: req.user.id,
-      filePath: `/uploads/licenses/${req.file.filename}`,
+      name,
+      description,
+      address
     });
 
     return res.status(201).json(saved);
@@ -23,30 +31,30 @@ async function uploadLicense(req, res) {
   }
 }
 
-async function myLicense(req, res) {
+async function myShop(req, res) {
   try {
-    const license = await getLatestSellerLicense(req.user.id);
+    const shop = await getShopBySellerId(req.user.id);
 
-    if (!license) {
-      return res.status(404).json({ message: "No license uploaded yet" });
+    if (!shop) {
+      return res.status(404).json({ message: "No shop registered yet" });
     }
 
-    return res.json(license);
+    return res.json(shop);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 }
 
-async function getPendingLicenses(req, res) {
+async function getPendingShops(req, res) {
   try {
-    const pending = await listPendingLicenses();
+    const pending = await listPendingShops();
     return res.json(pending);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 }
 
-async function reviewSellerLicense(req, res) {
+async function reviewSellerShop(req, res) {
   try {
     const { id } = req.params;
     const { status } = req.body;
@@ -57,13 +65,13 @@ async function reviewSellerLicense(req, res) {
         .json({ message: "status must be approved or rejected" });
     }
 
-    const existing = await getLicenseById(id);
+    const existing = await getShopById(id);
     if (!existing) {
-      return res.status(404).json({ message: "License not found" });
+      return res.status(404).json({ message: "Shop not found" });
     }
 
-    const reviewed = await reviewLicense({
-      licenseId: id,
+    const reviewed = await reviewShop({
+      shopId: id,
       status,
     });
 
@@ -74,8 +82,8 @@ async function reviewSellerLicense(req, res) {
 }
 
 module.exports = {
-  uploadLicense,
-  myLicense,
-  getPendingLicenses,
-  reviewSellerLicense,
+  registerShop,
+  myShop,
+  getPendingShops,
+  reviewSellerShop,
 };
