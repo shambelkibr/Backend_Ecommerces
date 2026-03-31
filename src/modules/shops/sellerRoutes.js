@@ -4,13 +4,13 @@ const {
   myLicense,
   getPendingLicenses,
   reviewSellerLicense,
-} = require("../controllers/sellerController");
-const authMiddleware = require("../middleware/authMiddleware");
+} = require("./sellerController");
+const authMiddleware = require("../../core/middlewares/authMiddleware");
 const {
   adminMiddleware,
   sellerMiddleware,
-} = require("../middleware/adminMiddleware");
-const upload = require("../middleware/uploadMiddleware");
+} = require("../../core/middlewares/adminMiddleware");
+const upload = require("../../core/middlewares/uploadMiddleware");
 
 const router = express.Router();
 

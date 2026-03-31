@@ -4,7 +4,7 @@ const {
   listPendingLicenses,
   reviewLicense,
   getLicenseById,
-} = require("../models/licenseModel");
+} = require("./licenseModel");
 
 async function uploadLicense(req, res) {
   try {

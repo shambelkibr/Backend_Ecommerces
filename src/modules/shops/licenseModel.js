@@ -1,4 +1,4 @@
-const pool = require("../config/db");
+const pool = require("../../config/db");
 
 async function createLicense({ sellerId, filePath }) {
   const [result] = await pool.execute(

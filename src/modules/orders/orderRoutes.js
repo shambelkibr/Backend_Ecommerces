@@ -9,12 +9,12 @@ const {
   updateOrderStatusHandler,
   myOrdersHandler,
   sellerOrdersHandler,
-} = require("../controllers/orderController");
-const authMiddleware = require("../middleware/authMiddleware");
+} = require("./orderController");
+const authMiddleware = require("../../core/middlewares/authMiddleware");
 const {
   adminMiddleware,
   sellerMiddleware,
-} = require("../middleware/adminMiddleware");
+} = require("../../core/middlewares/adminMiddleware");
 
 const router = express.Router();
 

@@ -5,10 +5,10 @@ const {
   getProductHandler,
   updateProductHandler,
   deleteProductHandler,
-} = require("../controllers/productController");
-const authMiddleware = require("../middleware/authMiddleware");
-const { sellerMiddleware } = require("../middleware/adminMiddleware");
-const upload = require("../middleware/uploadMiddleware");
+} = require("./productController");
+const authMiddleware = require("../../core/middlewares/authMiddleware");
+const { sellerMiddleware } = require("../../core/middlewares/adminMiddleware");
+const upload = require("../../core/middlewares/uploadMiddleware");
 
 const router = express.Router();
 

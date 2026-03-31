@@ -7,8 +7,8 @@ const {
   listOrdersByBuyer,
   listOrdersBySeller,
   updateOrderStatus,
-} = require("../models/orderModel");
-const { initiatePayment, verifyPayment } = require("../utils/paymentService");
+} = require("./orderModel");
+const { initiatePayment, verifyPayment } = require("../payments/paymentService");
 
 async function addToCartHandler(req, res) {
   try {

@@ -4,8 +4,8 @@ const {
   listProducts,
   updateProduct,
   deleteProduct,
-} = require("../models/productModel");
-const { getLatestSellerLicense } = require("../models/licenseModel");
+} = require("./productModel");
+const { getLatestSellerLicense } = require("../shops/licenseModel");
 
 async function createProductHandler(req, res) {
   try {

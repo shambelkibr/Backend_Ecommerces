@@ -1,14 +1,15 @@
+const dotenv = require("dotenv");
+dotenv.config();
+
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
-const dotenv = require("dotenv");
-const initDb = require("./config/initDb");
-const authRoutes = require("./routes/authRoutes");
-const productRoutes = require("./routes/productRoutes");
-const sellerRoutes = require("./routes/sellerRoutes");
-const orderRoutes = require("./routes/orderRoutes");
 
-dotenv.config();
+const initDb = require("./src/config/initDb");
+const authRoutes = require("./src/modules/auth/authRoutes");
+const productRoutes = require("./src/modules/products/productRoutes");
+const sellerRoutes = require("./src/modules/shops/sellerRoutes");
+const orderRoutes = require("./src/modules/orders/orderRoutes");
 
 const app = express();
 
@@ -22,7 +23,7 @@ app.use("/api/sellers", sellerRoutes);
 app.use("/api/orders", orderRoutes);
 
 app.get("/", (req, res) => {
-  res.send("Areke Ecommerce API Running");
+  res.send("Debre Birhan Local Clothes Ecommerce API Running");
 });
 
 app.use((err, req, res, next) => {

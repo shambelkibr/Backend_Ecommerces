@@ -1,5 +1,5 @@
-const pool = require("../config/db");
-const { updateOrderPaymentStatus } = require("../models/orderModel");
+const pool = require("../../config/db");
+const { updateOrderPaymentStatus } = require("../orders/orderModel");
 
 function generateTxRef(orderId) {
   return `CBE-${orderId}-${Date.now()}`;
